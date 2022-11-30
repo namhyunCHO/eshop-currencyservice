@@ -24,6 +24,19 @@ spec:
     }
   }
   stages {
+        stage('Approval') {
+      when {
+        branch 'main'
+      }
+      steps {
+        script {
+          def plan = 'frontend CI'
+          input message: "Do you want to build and push?",
+              parameters: [text(name: 'Plan', description: 'Please review the work', defaultValue: plan)]
+        }
+      } 
+    }
+
     stage('Build with Kaniko') {
       steps {
         container(name: 'kaniko', shell: '/busybox/sh') {
